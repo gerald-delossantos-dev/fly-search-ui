@@ -1,0 +1,179 @@
+<header class="topbar">
+  <a class="brand" aria-label="FlySearch home">
+    <span class="brand-icon">✈</span>
+    <span>FlySearch</span>
+  </a>
+
+  <nav class="desktop-nav" aria-label="Primary navigation">
+    <a class="active">Flights</a>
+    <a>Hotels</a>
+    <a>Car Rentals</a>
+    <a>Deals</a>
+  </nav>
+
+  <div class="actions">
+    <button class="ghost">🌐 EN</button>
+    <button class="ghost">♡ Saved</button>
+    <button class="ghost">♙ Sign in</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-content">
+      <p class="eyebrow">Smart travel starts here</p>
+      <h1>Find the best flights</h1>
+      <p>Search hundreds of airlines and travel sites to find your perfect trip.</p>
+    </div>
+
+    <div class="search-card" aria-label="Flight search form">
+      <div class="trip-tabs">
+        <button *ngFor="let trip of ['Round trip', 'One way', 'Multi-city']"
+                [class.active]="activeTrip === trip"
+                (click)="activeTrip = trip">
+          <span>{{ trip === 'Round trip' ? '✤' : trip === 'One way' ? '✈' : '↭' }}</span>{{ trip }}
+        </button>
+      </div>
+
+      <div class="search-grid">
+        <label class="field">
+          <span>From</span>
+          <strong>New York (JFK)</strong>
+          <small>New York, USA</small>
+        </label>
+
+        <button class="swap" aria-label="Swap origin and destination">⇄</button>
+
+        <label class="field">
+          <span>To</span>
+          <strong>London (LHR)</strong>
+          <small>London, United Kingdom</small>
+        </label>
+
+        <label class="field compact">
+          <span>Depart</span>
+          <strong>Jun 15, 2026</strong>
+          <small>Monday</small>
+        </label>
+
+        <label class="field compact">
+          <span>Return</span>
+          <strong>Jun 22, 2026</strong>
+          <small>Monday</small>
+        </label>
+
+        <label class="field compact">
+          <span>Travelers & Class</span>
+          <strong>1 Traveler</strong>
+          <small>Economy ▾</small>
+        </label>
+
+        <button class="search-btn">Search Flights</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-shell">
+    <aside class="filters" aria-label="Flight filters">
+      <div class="filter-head">
+        <h2>Filters</h2>
+        <button>Clear all</button>
+      </div>
+
+      <div class="filter-block">
+        <h3>Stops</h3>
+        <label><input type="checkbox"> Non-stop <span>$742</span></label>
+        <label><input type="checkbox" checked> 1 stop <span>$523</span></label>
+        <label><input type="checkbox"> 2+ stops <span>$485</span></label>
+      </div>
+
+      <div class="filter-block">
+        <h3>Price range</h3>
+        <p>$485 – ${{ priceRange }}</p>
+        <input type="range" min="485" max="1200" [(ngModel)]="priceRange">
+      </div>
+
+      <div class="filter-block">
+        <h3>Airlines</h3>
+        <input class="airline-search" placeholder="Search airlines">
+        <label><input type="checkbox" checked> American Airlines <span>$523</span></label>
+        <label><input type="checkbox"> Delta Air Lines <span>$542</span></label>
+        <label><input type="checkbox"> United Airlines <span>$560</span></label>
+        <label><input type="checkbox"> British Airways <span>$612</span></label>
+        <button class="show-more">Show more</button>
+      </div>
+    </aside>
+
+    <section class="results" aria-label="Flight results">
+      <div class="results-head">
+        <p><strong>312</strong> flights found</p>
+        <label>Sort by:
+          <select>
+            <option>Best</option>
+            <option>Cheapest</option>
+            <option>Fastest</option>
+          </select>
+        </label>
+      </div>
+
+      <article *ngFor="let flight of flights; let i = index"
+               class="flight-card"
+               [class.selected]="selectedFlightIndex === i">
+        <div class="badge" *ngIf="flight.badge">{{ flight.badge }}</div>
+        <div class="logo" [attr.data-airline]="flight.logo">{{ flight.logo }}</div>
+
+        <div class="airline">
+          <h3>{{ flight.airline }}</h3>
+          <p>{{ flight.code }} · {{ flight.aircraft }}</p>
+        </div>
+
+        <div class="time-block">
+          <strong>{{ flight.departTime }}</strong>
+          <span>JFK</span>
+        </div>
+
+        <div class="route-line">
+          <span>{{ flight.duration }}</span>
+          <div><i></i><i></i><i></i></div>
+          <b [class.direct]="flight.stopType === 'direct'">{{ flight.stop }}</b>
+        </div>
+
+        <div class="time-block">
+          <strong>{{ flight.arriveTime }}</strong>
+          <span>LHR</span>
+        </div>
+
+        <div class="price">
+          <strong>${{ flight.price }}</strong>
+          <span>per traveler</span>
+          <button (click)="selectFlight(i)">Select</button>
+        </div>
+      </article>
+
+      <button class="more-flights">Show more flights⌄</button>
+    </section>
+
+    <aside class="summary" aria-label="Trip summary">
+      <h2>Trip summary</h2>
+      <div class="summary-route">
+        <span>✈</span>
+        <div>
+          <strong>New York (JFK) → London (LHR)</strong>
+          <p>Jun 15 – Jun 22, 2026</p>
+          <p>1 Traveler, Economy</p>
+        </div>
+        <button aria-label="Edit trip">✎</button>
+      </div>
+
+      <div class="estimate">
+        <p>Price estimate</p>
+        <strong>${{ selectedFlight.price }}</strong>
+        <span>per traveler</span>
+      </div>
+
+      <button class="details">View Details</button>
+      <button class="save">♡ Save this trip</button>
+      <p class="notice">🔒 Prices are not final until you complete your booking.</p>
+    </aside>
+  </section>
+</main>
